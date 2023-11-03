@@ -1,0 +1,23 @@
+[versions]
+java-starter = "3.3.0"
+java-starter-plugins = "8.1.6"
+sonar-plugin = "4.4.1.3373"
+osgi = "2.0.0"
+
+[libraries]
+starterDependencies = {module = "com.zendesk.java-starter:starter-dependencies", version.ref = "java-starter" }
+starterFramework = { module = "com.zendesk.java-starter:starter-framework", version.ref = "java-starter" }
+starterTestkit = { module = "com.zendesk.java-starter:starter-testkit", version.ref = "java-starter" }
+osgi = { module = "org.osgi:org.osgi.annotation.bundle", version.ref = "osgi"}
+
+[bundles]
+javaStarter = ["starterFramework"]
+javaStarterTest = ["starterTestkit", "starterFramework"]
+
+[plugins]
+starterJavaDevelopment = { id = "zendesk.java17", version.ref = "java-starter-plugins" }
+starterApp = { id = "zendesk.app", version.ref = "java-starter-plugins" }
+starterTesting = { id = "zendesk.testing", version.ref = "java-starter-plugins" }
+starterContainer = { id = "zendesk.container.ecr", version.ref = "java-starter-plugins" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonar-plugin" }
+
