@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @SuppressWarnings("UnusedVariable")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record Comment(int postId, int id, String name,
-                      String email, String body) {
+public record Comment(long id, String type, long author_id, String body, Via via,
+                      String created_at) {
 
 }

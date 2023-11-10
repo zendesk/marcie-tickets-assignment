@@ -8,7 +8,4 @@ public interface TicketService {
 
   Future<TicketData> tickets();
 
-  Future<Ticket> addComment(String id, TicketComment comment);
-
-  Future<CommentData> comments(String ticketId);
 }

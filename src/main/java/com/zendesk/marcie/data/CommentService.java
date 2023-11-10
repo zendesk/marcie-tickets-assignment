@@ -5,5 +5,7 @@ import java.util.List;
 
 public interface CommentService {
 
-  Future<List<Comment>> byId(String id);
+  Future<Ticket> addComment(String id, Comment comment);
+
+  Future<CommentData> comments(String ticketId);
 }

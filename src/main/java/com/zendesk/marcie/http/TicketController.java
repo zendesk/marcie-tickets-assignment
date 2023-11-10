@@ -1,8 +1,9 @@
 package com.zendesk.marcie.http;
 
+import com.zendesk.marcie.data.Comment;
 import com.zendesk.marcie.data.CommentData;
+import com.zendesk.marcie.data.CommentService;
 import com.zendesk.marcie.data.Ticket;
-import com.zendesk.marcie.data.TicketComment;
 import com.zendesk.marcie.data.TicketData;
 import com.zendesk.marcie.data.TicketService;
 import com.zendesk.resteasy.RestEasyResource;
@@ -25,12 +26,13 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 public class TicketController implements RestEasyResource {
 
   private final TicketService ticketService;
+  private final CommentService commentService;
 
   @SuppressWarnings("MissingJavadocMethod")
   @PUT
   @Path("/tickets/{id}")
-  public Future<Ticket> addComment(@PathParam("id") String id, TicketComment comment) {
-    return ticketService.addComment(id, comment);
+  public Future<Ticket> addComment(@PathParam("id") String id, Comment comment) {
+    return commentService.addComment(id, comment);
   }
 
   @SuppressWarnings("MissingJavadocMethod")
@@ -51,7 +53,7 @@ public class TicketController implements RestEasyResource {
   @Path("/tickets/{id}/comments")
   @GetOne(produces = CommentData.class)
   public Future<CommentData> ticketComments(@PathParam("id") String id) {
-    return ticketService.comments(id);
+    return commentService.comments(id);
   }
 
   @NotFoundMessageProducer

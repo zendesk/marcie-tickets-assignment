@@ -29,7 +29,7 @@ public class ServiceStarter {
     }
 
     final var appInstance = StarterApp
-        .create("example-api-server", args)
+        .create("marcie-api-server", args)
         .withVerticle(HttpVerticleBuilder.from(MarcieHttpModule.class)
             .withInsights()
             .withBodyMiddleware()

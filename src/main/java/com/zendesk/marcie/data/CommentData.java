@@ -8,4 +8,4 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedVariable")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CommentData(List<TicketComment> comments) {}
+public record CommentData(List<Comment> comments) {}

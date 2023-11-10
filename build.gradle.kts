@@ -50,7 +50,11 @@ dependencies {
 
     "testImplementation"(sourceSets["main"].output)
     "testImplementation"(sourceSets["client"].output)
-
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    testImplementation("org.jboss.weld:weld-junit5:3.1.8.Final")
+    testImplementation("org.mockito:mockito-core:4.2.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.2.0")
 }
 
 tasks.named<Checkstyle>("checkstyleMain") {

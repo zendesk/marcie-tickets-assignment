@@ -1,36 +1,69 @@
 package com.zendesk.marcie.data;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.zendesk.core.caching.CacheKey;
 import com.zendesk.core.caching.CacheResult;
 import com.zendesk.core.metrics.microprofile.CountedFailure;
-import com.zendesk.core.webclient.ClientRequest;
-import com.zendesk.core.webclient.WebClient;
+import com.zendesk.core.metrics.microprofile.CountedSuccess;
 import io.vertx.core.Future;
-import io.vertx.core.json.jackson.JacksonCodec;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClient;
 import jakarta.inject.Inject;
-import java.util.List;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.annotation.Timed;
-import org.eclipse.microprofile.opentracing.Traced;
 
-class CommentServiceImpl implements CommentService {
-
-  @ZendeskWebClient
-  private final WebClient client;
+class CommentServiceImpl extends BaseService implements CommentService {
 
   @Inject
   public CommentServiceImpl(WebClient client) {
-    this.client = client;
+    super(client);
   }
 
-  @CacheResult(cacheName = "comments_cache")
-  @Traced(operationName = "comments.api.trace")
-  @Timed(name = "comments.api.time", absolute = true)
-  @CountedFailure(name = "comments.api.failure", absolute = true)
+
+  @CacheResult(cacheName = "tickets_cache")
+  @Retry(maxRetries = 5)
+  @Timeout(5000) //timeout after 5 seconds
+  @Timed(name = "tickets.api.time", absolute = true)
+  @CountedFailure(name = "tickets.api.failure", absolute = true)
+  @CountedSuccess(name = "tickets.api.success", absolute = true)
   @Override
-  public Future<List<Comment>> byId(@CacheKey String id) {
-    return client.execute(ClientRequest.forJsonArray("/comments").queryParam("postId", id).build(),
-        response -> JacksonCodec.decodeValue(response.body().toBuffer(), new TypeReference<>() {
-        }));
+  public Future<Ticket> addComment(@CacheKey String ticketId, Comment comment) {
+    JsonObject commentJson = new JsonObject().put("ticket",
+        new JsonObject().put("comment", new JsonObject().put("body", comment.body())));
+    return client.put("/api/v2/tickets/" + ticketId + ".json")
+        .putHeader(contentType, applcationJson).basicAuthentication(username, password)
+        .sendJsonObject(commentJson).compose(res -> {
+          if (res.statusCode() == 200 || res.statusCode() == 201) {
+
+            var resObj = res.bodyAsJsonObject().getJsonObject("ticket");
+            System.out.println(resObj.encodePrettily());
+            return Future.succeededFuture(resObj.mapTo(Ticket.class));
+          } else {
+            return Future.failedFuture(
+                "Add comment request failed with status code: " + res.statusCode());
+          }
+        });
+  }
+
+  @CacheResult(cacheName = "tickets_cache")
+  @Retry(maxRetries = 5)
+  @Timeout(5000) //timeout after 5 seconds
+  @Timed(name = "tickets.api.time", absolute = true)
+  @CountedFailure(name = "tickets.api.failure", absolute = true)
+  @CountedSuccess(name = "tickets.api.success", absolute = true)
+  @Override
+  public Future<CommentData> comments(String ticketId) {
+
+    return client.get("/api/v2/tickets/" + ticketId + "/comments")
+        .putHeader(contentType, applcationJson).basicAuthentication(username, password).send()
+        .compose(res -> {
+          if (res.statusCode() == 200) {
+            System.out.println(res.bodyAsJsonObject().encodePrettily());
+            return Future.succeededFuture(res.bodyAsJsonObject().mapTo(CommentData.class));
+
+          } else {
+            return Future.failedFuture("Failed to fetch comment " + res.statusCode());
+          }
+        });
   }
 }

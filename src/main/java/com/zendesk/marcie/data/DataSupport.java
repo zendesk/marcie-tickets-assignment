@@ -22,7 +22,7 @@ public class DataSupport implements StarterWeldExtension {
   @Override
   public void configure(Weld weld) {
     ZendeskLogger.forEnclosingClass().atInfo().log("Loading Data Support beans");
-    weld.addBeanClasses(PostServiceImpl.class, CommentServiceImpl.class, TicketServiceImpl.class);
+    weld.addBeanClasses(CommentServiceImpl.class, TicketServiceImpl.class);
   }
 
   @Override
@@ -43,7 +43,7 @@ public class DataSupport implements StarterWeldExtension {
   public WebClient provideClient(StarterContext context) {
     context.settings().appEnvironment();
     return WebClientBuilder.create(context).withSsl(true)
-        .withBaseUri(URI.create("https://zendeskcodingchallenge9453.zendesk.com/"))
+        .withBaseUri(URI.create("https://jsonplaceholder.typicode.com/posts"))
         .withCircuitBreaker(BreakerOptions.withDefaults("json-breaker"))
         .withClientName("jsonplaceholder-client").build()
         .getOrElseThrow((Supplier<RuntimeException>) RuntimeException::new);

@@ -10,6 +10,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Ticket(String url, int id, String subject, Date created_at, Date updated_at,
                      String type, long requester_id, long submitter_id, long assignee_id,
-                     String description, List<String> tags, Audit audit) {
+                     String description, List<String> tags, Audit audit, Via via, String status,
+                     String priority) {
 
 }

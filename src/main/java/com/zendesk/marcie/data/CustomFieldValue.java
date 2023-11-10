@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CustomFieldValue implements Serializable {
+public class CustomFieldValue {
 
-  private static final long serialVersionUID = 1L;
 
   private Long id;
 
