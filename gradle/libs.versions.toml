@@ -1,5 +1,5 @@
 [versions]
-java-starter = "3.3.0"
+java-starter = "3.5.0"
 java-starter-plugins = "8.1.6"
 sonar-plugin = "4.4.1.3373"
 osgi = "2.0.0"
