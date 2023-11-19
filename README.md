@@ -21,7 +21,7 @@ The microservice uses the Zendesk API for its functionalities. In order to run t
     * Zendesk Username
     * Zendesk Password/API token
 
-2. After you get these details, set the following environment variables in your .env file or system environment:
+2. After you get these details, set the following environment variables in your system environment (Environment Variables in Intellij Idea):
 
     ```
     export SUBDOMAIN=your_zendesk_subdomain
@@ -37,9 +37,8 @@ Replace `your_zendesk_subdomain`, `your_zendesk_username`, and `your_zendesk_pas
 
 After setting the environment variables, you can run your service using your preferred method. For example, if you're running the service using a `main` method or from a packaged jar, you may use:
 
-```sh
-java -jar your-service.jar
-```
+`run gradle project`
+- Gradle Project -> Tasks -> application -> run
 
 Replace `your-service.jar` with the actual name of your jar file.
 

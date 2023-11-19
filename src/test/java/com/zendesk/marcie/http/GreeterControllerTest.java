@@ -21,7 +21,7 @@ public class GreeterControllerTest {
 
   @Test
   public void testSayHello() throws URISyntaxException {
-    String nameParam = "Dattatray";
+    String nameParam = "Username";
     MockHttpRequest request = MockHttpRequest.get("/api/hello?name=" + nameParam);
     MockHttpResponse response = new MockHttpResponse();
 

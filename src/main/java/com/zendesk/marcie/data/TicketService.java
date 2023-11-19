@@ -4,8 +4,8 @@ import io.vertx.core.Future;
 
 public interface TicketService {
 
-  Future<Ticket> byId(String id);
+  Future<TicketResult> ticketById(String id);
 
-  Future<TicketData> tickets();
+  Future<TicketsResult> tickets();
 
 }

@@ -1,11 +1,12 @@
 package com.zendesk.marcie.http;
 
 import com.zendesk.marcie.data.Comment;
-import com.zendesk.marcie.data.CommentData;
+import com.zendesk.marcie.data.CommentResult;
 import com.zendesk.marcie.data.CommentService;
 import com.zendesk.marcie.data.Ticket;
-import com.zendesk.marcie.data.TicketData;
+import com.zendesk.marcie.data.TicketResult;
 import com.zendesk.marcie.data.TicketService;
+import com.zendesk.marcie.data.TicketsResult;
 import com.zendesk.resteasy.RestEasyResource;
 import com.zendesk.resteasy.ext.GetOne;
 import com.zendesk.resteasy.ext.NotFoundMessageProducer;
@@ -29,6 +30,13 @@ public class TicketController implements RestEasyResource {
   private final CommentService commentService;
 
   @SuppressWarnings("MissingJavadocMethod")
+  @Path("/tickets/{ticketId}/comments")
+  @GetOne(produces = CommentResult.class)
+  public Future<CommentResult> ticketComments(@PathParam("ticketId") String ticketId) {
+    return commentService.comments(ticketId);
+  }
+
+  @SuppressWarnings("MissingJavadocMethod")
   @PUT
   @Path("/tickets/{id}")
   public Future<Ticket> addComment(@PathParam("id") String id, Comment comment) {
@@ -37,23 +45,16 @@ public class TicketController implements RestEasyResource {
 
   @SuppressWarnings("MissingJavadocMethod")
   @Path("/tickets/{id}")
-  @GetOne(produces = Ticket.class)
-  public Future<Ticket> ticketById(@PathParam("id") String id) {
-    return ticketService.byId(id);
+  @GetOne(produces = TicketResult.class)
+  public Future<TicketResult> ticketById(@PathParam("id") String id) {
+    return ticketService.ticketById(id);
   }
 
   @SuppressWarnings("MissingJavadocMethod")
   @Path("/tickets")
-  @GetOne(produces = TicketData.class)
-  public Future<TicketData> tickets() {
+  @GetOne(produces = TicketsResult.class)
+  public Future<TicketsResult> tickets() {
     return ticketService.tickets();
-  }
-
-  @SuppressWarnings("MissingJavadocMethod")
-  @Path("/tickets/{id}/comments")
-  @GetOne(produces = CommentData.class)
-  public Future<CommentData> ticketComments(@PathParam("id") String id) {
-    return commentService.comments(id);
   }
 
   @NotFoundMessageProducer

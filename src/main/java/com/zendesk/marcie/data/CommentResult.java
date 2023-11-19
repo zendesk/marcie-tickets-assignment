@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 /**
- * Represents a TicketList data model.
+ * Represents a CommentList data model.
  */
 @SuppressWarnings("UnusedVariable")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record TicketData(List<Ticket> tickets) {}
+public record CommentResult(List<Comment> comments) {}
