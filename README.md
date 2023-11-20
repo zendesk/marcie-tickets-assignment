@@ -1,3 +1,4 @@
+
 # Zendesk assignment (marcie-ticket-service)
 
 This is a microservice application providing functionalities to list tickets, add a comment to a ticket, list comments on a ticket, and render comments after selecting a specific ticket.
@@ -53,3 +54,5 @@ The service exposes the following endpoints for interaction:
 ---
 
 Please ensure to replace placeholders with actual values as per your project structure and guidelines.
+
+
