@@ -8,4 +8,7 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedVariable")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record TicketsResult(List<Ticket> tickets, String next_page, String previous_page, long count) {}
+public record TicketsResult(List<Ticket> tickets, String next_page, String previous_page,
+                            long count) {
+
+}

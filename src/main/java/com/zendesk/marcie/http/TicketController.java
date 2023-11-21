@@ -1,8 +1,8 @@
 package com.zendesk.marcie.http;
 
-import com.zendesk.marcie.data.Comment;
 import com.zendesk.marcie.data.CommentResult;
 import com.zendesk.marcie.data.CommentService;
+import com.zendesk.marcie.data.CommentTicket;
 import com.zendesk.marcie.data.Ticket;
 import com.zendesk.marcie.data.TicketResult;
 import com.zendesk.marcie.data.TicketService;
@@ -41,7 +41,7 @@ public class TicketController implements RestEasyResource {
   @SuppressWarnings("MissingJavadocMethod")
   @PUT
   @Path("/tickets/{id}")
-  public Future<Ticket> addComment(@PathParam("id") String id, Comment comment) {
+  public Future<Ticket> addComment(@PathParam("id") String id, CommentTicket comment) {
     return commentService.addComment(id, comment);
   }
 
