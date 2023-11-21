@@ -12,9 +12,11 @@ import com.zendesk.resteasy.ext.GetOne;
 import com.zendesk.resteasy.ext.NotFoundMessageProducer;
 import io.vertx.core.Future;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -53,8 +55,9 @@ public class TicketController implements RestEasyResource {
   @SuppressWarnings("MissingJavadocMethod")
   @Path("/tickets")
   @GetOne(produces = TicketsResult.class)
-  public Future<TicketsResult> tickets() {
-    return ticketService.tickets();
+  public Future<TicketsResult> tickets(@DefaultValue("1") @QueryParam("page") int page,
+      @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
+    return ticketService.tickets(page, pageSize);
   }
 
   @NotFoundMessageProducer

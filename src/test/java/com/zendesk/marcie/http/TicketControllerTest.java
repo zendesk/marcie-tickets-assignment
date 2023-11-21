@@ -189,11 +189,11 @@ class TicketControllerTest {
     List<Ticket> expectedTicketList = List.of(ticket);
 
 
-    TicketsResult expected = new TicketsResult(expectedTicketList);
+    TicketsResult expected = new TicketsResult(expectedTicketList, "", "", 20);
 
-    when(ticketService.tickets()).thenReturn(Future.succeededFuture(expected));
+    when(ticketService.tickets(1, 25)).thenReturn(Future.succeededFuture(expected));
 
-    Future<TicketsResult> resultFuture = ticketController.tickets();
+    Future<TicketsResult> resultFuture = ticketController.tickets(1, 25);
     TicketsResult result = resultFuture.result();
 
     assertNotNull(result);
