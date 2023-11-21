@@ -8,8 +8,10 @@ import static org.mockito.Mockito.when;
 
 import com.zendesk.marcie.data.Audit;
 import com.zendesk.marcie.data.Comment;
+import com.zendesk.marcie.data.CommentField;
 import com.zendesk.marcie.data.CommentResult;
 import com.zendesk.marcie.data.CommentService;
+import com.zendesk.marcie.data.CommentTicket;
 import com.zendesk.marcie.data.Event;
 import com.zendesk.marcie.data.Ticket;
 import com.zendesk.marcie.data.TicketResult;
@@ -67,7 +69,7 @@ class TicketControllerTest {
 
   @Test
   void testAddComment() {
-    String url = "https://zendeskcodingchallenge8192.zendesk.com/api/v2/tickets/3.json";
+    String url = "https://subdomain.zendesk.com/api/v2/tickets/3.json";
     int id = 3;
     String subject = "Sample ticket: Meet the ticket";
     Date createdAt = new Date();
@@ -106,11 +108,13 @@ class TicketControllerTest {
 
     Comment comment = new Comment(commentId, commentType, commentAuthorId, commentBody, commentVia,
         commentCreatedAt);
+    CommentField commentField = new CommentField(comment);
+    CommentTicket commentTicket = new CommentTicket(commentField);
 
-    when(commentService.addComment(any(String.class), any(Comment.class))).thenReturn(
+    when(commentService.addComment(any(String.class), any(CommentTicket.class))).thenReturn(
         Future.succeededFuture(expected));
 
-    Future<Ticket> result = ticketController.addComment("3", comment);
+    Future<Ticket> result = ticketController.addComment("3", commentTicket);
     assertEquals(expected, result.result());
     assertNotNull(result);
 
@@ -118,7 +122,7 @@ class TicketControllerTest {
 
   @Test
   void testTicketById() {
-    String url = "https://zendeskcodingchallenge8192.zendesk.com/api/v2/tickets/2.json";
+    String url = "https://subdomain.zendesk.com/api/v2/tickets/2.json";
     int id = 2;
     String subject = "Sample ticket: Meet the ticket";
     Date createdAt = new Date();
@@ -157,7 +161,7 @@ class TicketControllerTest {
 
   @Test
   void testTickets() {
-    String url = "https://zendeskcodingchallenge8192.zendesk.com/api/v2/tickets/1.json";
+    String url = "https://subdomain.zendesk.com/api/v2/tickets/1.json";
     int id = 1;
     String subject = "Sample ticket: Meet the ticket";
     Date createdAt = new Date();
@@ -189,11 +193,11 @@ class TicketControllerTest {
     List<Ticket> expectedTicketList = List.of(ticket);
 
 
-    TicketsResult expected = new TicketsResult(expectedTicketList);
+    TicketsResult expected = new TicketsResult(expectedTicketList, "", "", 20);
 
-    when(ticketService.tickets()).thenReturn(Future.succeededFuture(expected));
+    when(ticketService.tickets(1, 25)).thenReturn(Future.succeededFuture(expected));
 
-    Future<TicketsResult> resultFuture = ticketController.tickets();
+    Future<TicketsResult> resultFuture = ticketController.tickets(1, 25);
     TicketsResult result = resultFuture.result();
 
     assertNotNull(result);

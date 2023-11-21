@@ -26,12 +26,12 @@ class CommentServiceImpl extends BaseService implements CommentService {
   @CountedFailure(name = "comments.api.failure", absolute = true)
   @CountedSuccess(name = "comments.api.success", absolute = true)
   @Override
-  public Future<Ticket> addComment(@CacheKey String ticketId, Comment comment) {
-    JsonObject commentJson = new JsonObject().put("ticket",
-        new JsonObject().put("comment", new JsonObject().put("body", comment.body())));
+  public Future<Ticket> addComment(@CacheKey String ticketId, CommentTicket comment) {
+    //    JsonObject commentJson = new JsonObject().put("ticket",
+    //        new JsonObject().put("comment", new JsonObject().put("body", comment.body())));
     return client.put("/api/v2/tickets/" + ticketId + ".json")
         .putHeader(contentType, applcationJson).basicAuthentication(username, password)
-        .sendJsonObject(commentJson).compose(res -> {
+        .sendJsonObject(JsonObject.mapFrom(comment)).compose(res -> {
           if (res.statusCode() == 200 || res.statusCode() == 201) {
             var resObj = res.bodyAsJsonObject().getJsonObject("ticket");
             return Future.succeededFuture(resObj.mapTo(Ticket.class));

@@ -47,8 +47,9 @@ class TicketServiceImpl extends BaseService implements TicketService {
   @CountedFailure(name = "tickets.api.failure", absolute = true)
   @CountedSuccess(name = "tickets.api.success", absolute = true)
   @Override
-  public Future<TicketsResult> tickets() {
-    return client.get("/api/v2/tickets").putHeader(contentType, applcationJson)
+  public Future<TicketsResult> tickets(int page, int pageSize) {
+    return client.get("/api/v2/tickets?per_page=25&page=" + page)
+        .putHeader(contentType, applcationJson)
         .basicAuthentication(username, password).send().compose(res -> {
           if (res.statusCode() == 200) {
             return Future.succeededFuture(res.bodyAsJsonObject().mapTo(TicketsResult.class));

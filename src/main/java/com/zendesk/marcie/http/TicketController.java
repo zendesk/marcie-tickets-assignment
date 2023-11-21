@@ -1,8 +1,8 @@
 package com.zendesk.marcie.http;
 
-import com.zendesk.marcie.data.Comment;
 import com.zendesk.marcie.data.CommentResult;
 import com.zendesk.marcie.data.CommentService;
+import com.zendesk.marcie.data.CommentTicket;
 import com.zendesk.marcie.data.Ticket;
 import com.zendesk.marcie.data.TicketResult;
 import com.zendesk.marcie.data.TicketService;
@@ -12,9 +12,11 @@ import com.zendesk.resteasy.ext.GetOne;
 import com.zendesk.resteasy.ext.NotFoundMessageProducer;
 import io.vertx.core.Future;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -39,7 +41,7 @@ public class TicketController implements RestEasyResource {
   @SuppressWarnings("MissingJavadocMethod")
   @PUT
   @Path("/tickets/{id}")
-  public Future<Ticket> addComment(@PathParam("id") String id, Comment comment) {
+  public Future<Ticket> addComment(@PathParam("id") String id, CommentTicket comment) {
     return commentService.addComment(id, comment);
   }
 
@@ -53,8 +55,9 @@ public class TicketController implements RestEasyResource {
   @SuppressWarnings("MissingJavadocMethod")
   @Path("/tickets")
   @GetOne(produces = TicketsResult.class)
-  public Future<TicketsResult> tickets() {
-    return ticketService.tickets();
+  public Future<TicketsResult> tickets(@DefaultValue("1") @QueryParam("page") int page,
+      @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
+    return ticketService.tickets(page, pageSize);
   }
 
   @NotFoundMessageProducer

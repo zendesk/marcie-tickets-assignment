@@ -6,6 +6,6 @@ public interface TicketService {
 
   Future<TicketResult> ticketById(String id);
 
-  Future<TicketsResult> tickets();
+  Future<TicketsResult> tickets(int page, int pageSize);
 
 }
